@@ -125,14 +125,17 @@ kubectl describe node ip-10-0-3-233.eu-west-2.compute.internal
 ```
 The information is written in the labels section of the descibe command.
  <img src="https://darey-io-nonprod-pbl-projects.s3.eu-west-2.amazonaws.com/project23/region_zone_of_pod.png" width="936px" height="550px">
+
 4. So, in the case above, we know the AZ for the node is in `eu-west-2c` hence, the volume must be created in the same AZ. Choose the size of the required volume.
 
 The **create volume** selection should be like:
 
 <img src="https://darey-io-nonprod-pbl-projects.s3.eu-west-2.amazonaws.com/project23/create-volume-in-region.png" width="936px" height="550px">
+
 5. Copy the VolumeID
 
 <img src="https://darey-io-nonprod-pbl-projects.s3.eu-west-2.amazonaws.com/project23/volumeID.png" width="936px" height="550px">
+
 6. Update the deployment configuration with the volume spec.
 
 ```
@@ -169,6 +172,8 @@ EOF
 Apply the new configuration and check the pod. As you can see, the old pod is being terminated while the updated one is up and running.
 
 <img src="https://darey-io-nonprod-pbl-projects.s3.eu-west-2.amazonaws.com/project23/apply-pod-config.png" width="936px" height="550px">
+
+
 Now, the new pod has a volume attached to it, and can be used to run a container for statefuleness. Go ahead and explore the running pod. Run `describe` on both the **pod** and **deployment**
 
 At this point, even though the pod can be used for a stateful application, the configuration is not yet complete. This is because, the volume is not yet mounted onto any specific filesystem inside the container. The directory `/usr/share/nginx/html` which holds the software/website code is still ephemeral, and if there is any kind of update to the `index.html` file, the new changes will only be there for as long as the pod is still running. If the pod dies after, all previously written data will be erased.
